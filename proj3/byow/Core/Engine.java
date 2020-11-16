@@ -14,8 +14,6 @@ public class Engine {
     Random r;
 
     public Engine() {
-        renderer = new TERenderer();
-        renderer.initialize(WIDTH, HEIGHT);
         worldFrame = new TETile[WIDTH][HEIGHT];
     }
 
@@ -75,7 +73,6 @@ public class Engine {
                 index++;
                 r  = new Random(seed);
                 worldFrame = new BSP(WIDTH, HEIGHT, r).createLeaves();
-                renderer.renderFrame(worldFrame);
             } else if (input.charAt(index) == 'l' || input.charAt(index) == 'L') {
                 index++;
             } else if (input.charAt(index) == ':' && (input.charAt(index) == 'q'
@@ -94,9 +91,19 @@ public class Engine {
         return world;
     }
 
+    public void initializeRenderer() {
+        renderer = new TERenderer();
+        renderer.initialize(WIDTH, HEIGHT);
+    }
+    public void renderWorld() {
+        renderer.renderFrame(worldFrame);
+    }
+
     public static void main(String[] args) {
         Engine engine = new Engine();
+        engine.initializeRenderer();
         engine.interactWithInputString("N" + new Random().nextInt() + "S");
+        engine.renderWorld();
         System.out.println("done");
     }
 }
