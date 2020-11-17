@@ -61,7 +61,7 @@ public class Engine {
         if (input == null) {
             return null;
         }
-
+        System.out.println("Generating world with seed " + input);
         while (index < input.length()) {
             if (input.charAt(index) == 'N' || input.charAt(index) == 'n') {
                 index++;
@@ -102,7 +102,7 @@ public class Engine {
     public static void main(String[] args) {
         Engine engine = new Engine();
         engine.initializeRenderer();
-        engine.interactWithInputString("N" + new Random().nextInt() + "S");
+        engine.interactWithInputString("N" + Math.abs(new Random().nextInt()) + "S");
         engine.renderWorld();
         System.out.println("done");
     }
