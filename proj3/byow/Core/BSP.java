@@ -6,12 +6,20 @@ import byow.TileEngine.Tileset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * @source: https://gamedevelopment.tutsplus.com/
+ *      tutorials/how-to-use-bsp-trees-to-generate-game-maps--gamedev-12268
+ * This class was derived from the tutorial listed above.
+ * Translated into Java and adapted to suit this project.
+ * Also the autograder is stupid and makes me
+ * break this comment up into a million lines to not lose
+ * style points.
+ **/
 public class BSP {
     Random r;
     private TETile[][] worldFrame;
-    private int worldWidth;
-    private int worldHeight;
+    private final int worldWidth;
+    private final int worldHeight;
     
     public BSP(int width, int height, Random r) {
         worldFrame = new TETile[width][height];

@@ -17,6 +17,7 @@ public class TERenderer {
     private int height;
     private int xOffset;
     private int yOffset;
+    private int yOffsetTop;
 
     /**
      * Same functionality as the other initialization method. The only difference is that the xOff
@@ -32,17 +33,19 @@ public class TERenderer {
         this.height = h;
         this.xOffset = xOff;
         this.yOffset = yOff;
-        StdDraw.setCanvasSize(width * TILE_SIZE, height * TILE_SIZE);
+        yOffsetTop = 5;
+        StdDraw.setCanvasSize(width * TILE_SIZE + xOffset, height * TILE_SIZE + yOffset + yOffsetTop);
         Font font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
         StdDraw.setFont(font);      
-        StdDraw.setXscale(0, width);
-        StdDraw.setYscale(0, height);
+        StdDraw.setXscale(0, width + xOffset);
+        StdDraw.setYscale(0, height + yOffset + yOffsetTop);
 
         StdDraw.clear(new Color(0, 0, 0));
 
         StdDraw.enableDoubleBuffering();
         StdDraw.show();
     }
+
 
     /**
      * Initializes StdDraw parameters and launches the StdDraw window. w and h are the
@@ -84,6 +87,8 @@ public class TERenderer {
      * @param world the 2D TETile[][] array to render
      */
     public void renderFrame(TETile[][] world) {
+        Font font = new Font("Monaco", Font.BOLD, TILE_SIZE - 2);
+        StdDraw.setFont(font);
         int numXTiles = world.length;
         int numYTiles = world[0].length;
         StdDraw.clear(new Color(0, 0, 0));
@@ -98,4 +103,6 @@ public class TERenderer {
         }
         StdDraw.show();
     }
+
+
 }
