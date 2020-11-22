@@ -172,40 +172,32 @@ public class Engine {
         try {
             File inputFile = new File("saved.txt");
             Scanner reader = new Scanner(inputFile);
-//            if (!reader.hasNext()) {
-//                return true;
-//            }
 
             prevSeed = reader.nextLong();
             if (reader.hasNext()) {
                 prevPath = reader.next();
             }
-//
-//            if (replay) {
-//                String currentPath = player.getPath();
-//                interactWithInputString("N" + prevSeed + "S");
-//                renderWorld();
-//                int ind = 0;
-//                while (ind < prevPath.length()) {
-//                    player.move(prevPath.charAt(ind));
-//                    renderWorld();
-//                    Thread.sleep(100);
-//                    ind++;
-//                }
-//                Thread.sleep(2000);
-//                interactWithInputString("N" + seed + "S" + currentPath);
-//                renderWorld();
-//
-//            } else {
-            interactWithInputString("N" + prevSeed + "S" + prevPath);
-            player.clearPath();
-//            }
+
+            if (replay) {
+                interactWithInputString("N" + prevSeed + "S");
+                gEngine.gameLoopHook();
+                int ind = 0;
+                while (ind < prevPath.length()) {
+                    player.move(prevPath.charAt(ind));
+                    gEngine.gameLoopHook();
+                    Thread.sleep(100);
+                    ind++;
+                }
+                player.clearPath();
+                Thread.sleep(500);
+            } else {
+                interactWithInputString("N" + prevSeed + "S" + prevPath);
+                player.clearPath();
+            }
             reader.close();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             System.out.println("load error");
         }
-
-//        return false;
     }
 
     public void save() {
