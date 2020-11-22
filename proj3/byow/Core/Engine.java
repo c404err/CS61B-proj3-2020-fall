@@ -1,15 +1,9 @@
 package byow.Core;
 
-
-import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
-import byow.TileEngine.Tileset;
 import edu.princeton.cs.algs4.StdDraw;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Random;
 
 import java.io.File;
@@ -20,8 +14,8 @@ public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    public TETile[][] worldFrame;
-    Random randomNumberGen;
+    private TETile[][] worldFrame;
+    private Random randomNumberGen;
     private Player player;
     private long seed;
     private boolean seedInput = false;
@@ -44,8 +38,8 @@ public class Engine {
         inputHistory = new StringBuilder();
         quit = false;
     }
-    public Engine(boolean graphics) {
-        this.graphics = graphics;
+    public Engine(boolean graphic) {
+        this.graphics = graphic;
         seed = 0;
         inputHistory = new StringBuilder();
         quit = false;
@@ -116,8 +110,7 @@ public class Engine {
         return worldFrame;
     }
 
-    public void inputHandler(char input)
-    {
+    public void inputHandler(char input) {
         inputHistory.append(input);
         if (seedInput) {
             seedHandler(input);
@@ -129,7 +122,7 @@ public class Engine {
                 loadFlag = true;
                 load(false);
             } else if (input == 'r') {
-                //replay();
+                load(true);
             }
         } else if (playerControl) {
             if (input == 'w' || input == 'a' || input == 's' || input == 'd') {
@@ -166,6 +159,9 @@ public class Engine {
         return seed;
     }
 
+    public TETile[][] getWorldFrame() {
+        return worldFrame;
+    }
 
 
     public String getCurrentMenu() {
@@ -181,8 +177,9 @@ public class Engine {
 //            }
 
             prevSeed = reader.nextLong();
-            if (reader.hasNext())
+            if (reader.hasNext()) {
                 prevPath = reader.next();
+            }
 //
 //            if (replay) {
 //                String currentPath = player.getPath();
@@ -200,7 +197,8 @@ public class Engine {
 //                renderWorld();
 //
 //            } else {
-                interactWithInputString("N" + prevSeed + "S" + prevPath);
+            interactWithInputString("N" + prevSeed + "S" + prevPath);
+            player.clearPath();
 //            }
             reader.close();
         } catch (IOException e) {
@@ -213,31 +211,19 @@ public class Engine {
     public void save() {
         try {
             File outputFile = new File("saved.txt");
-            PrintWriter writer = new PrintWriter(outputFile,"UTF-8");
+            PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
 
-//            if (!outputFile.createNewFile()) {
-////                if (loadFlag) {
-////                    Scanner reader = new Scanner(outputFile);
-////                    seed = reader.nextLong();
-////                    prevPath = reader.next();
-////                } else {
-////                    outputFile.delete();
-////                    outputFile.createNewFile();
-////                }
-//                outputFile.delete();
-//                outputFile.createNewFile();
-//            }
+            if (!outputFile.createNewFile()) {
+                outputFile.delete();
+                outputFile.createNewFile();
+            }
 
             if (loadFlag) {
                 writer.println(prevSeed);
-                writer.flush();
                 writer.println(prevPath + player.getPath());
-                writer.flush();
             } else {
                 writer.println(seed);
-                writer.flush();
                 writer.println(player.getPath());
-                writer.flush();
             }
             writer.close();
         } catch (IOException e) {
@@ -247,10 +233,9 @@ public class Engine {
 
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Engine engine = new Engine(true);
-        engine.interactWithInputString("N123213213212133Swsaad:Q");
-        engine.interactWithInputString("LSADS:q");
+        engine.interactWithKeyboard();
         System.out.println("done");
     }
 }

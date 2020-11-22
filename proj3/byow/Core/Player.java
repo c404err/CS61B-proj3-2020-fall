@@ -3,26 +3,29 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class Player {
-    Random r;
+    private Random r;
     private int initialX, initialY, x, y,
             worldWidth, worldHeight;
     private TETile[][] worldFrame;
 
     private String path = "";
 
-    Player(int Width, int Height, TETile[][] world, Random random) {
-        worldWidth = Width;
-        worldHeight = Height;
+    Player(int width, int height, TETile[][] world, Random random) {
+        worldWidth = width;
+        worldHeight = height;
         worldFrame = world;
         r = random;
     }
 
     public String getPath() {
         return path;
+    }
+
+    public void clearPath() {
+        path = "";
     }
 
     public void addPlayer() {
@@ -47,7 +50,7 @@ public class Player {
         path += input;
         if (input == 'a' || input == 'd') {
             if (input == 'a') {
-                factor= -1;
+                factor = -1;
             } else {
                 factor = 1;
             }

@@ -51,9 +51,11 @@ public class GraphicsEngine {
         clear();
         StdDraw.setFont(splashFont);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16), "CS61B: BYOW: The Game: The Sequel: Revengenace");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16),
+                "CS61B: BYOW: The Game: The Sequel: Revengenace");
         StdDraw.setFont(promptFont);
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT, 3), "Press N to Build Your Own World!");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT, 3),
+                "Press N to Build Your Own World!");
         StdDraw.show();
     }
 
@@ -61,8 +63,10 @@ public class GraphicsEngine {
         clear();
         StdDraw.setFont(promptFont);
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16), "Please type your desired seed (Numbers only!)");
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 18), "Type S when finished");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16),
+                "Please type your desired seed (Numbers only!)");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 18),
+                "Type S when finished");
         seedInput = Long.toString(gameEngine.getSeed());
         StdDraw.setFont(promptFont);
         StdDraw.setPenColor(Color.WHITE);
@@ -115,12 +119,13 @@ public class GraphicsEngine {
             seedScreenTextUpdate();
         } else if (gameEngine.getCurrentMenu().equals("Overworld")) {
             if (worldFrame == null) {
-                worldFrame = gameEngine.worldFrame;
+                worldFrame = gameEngine.getWorldFrame();
             }
             mouseOverX = getXTile() - 2;
             mouseOverY = getYTile() - 2;
             if (checkMouseInBounds()) {
-                if (mouseOverTileType == null || !mouseOverTileType.equals(worldFrame[mouseOverX][mouseOverY])) {
+                if (mouseOverTileType == null
+                        || !mouseOverTileType.equals(worldFrame[mouseOverX][mouseOverY])) {
                     mouseOverTileType = worldFrame[mouseOverX][mouseOverY];
                     tooltipText = mouseOverTileType.description();
                 }
