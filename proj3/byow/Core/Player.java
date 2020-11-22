@@ -27,7 +27,7 @@ public class Player {
         this.y = y;
     }
 
-    public TETile[][] addPlayer() {
+    public void addPlayer() {
         for (x = (worldWidth / 8 + r.nextInt(worldWidth / 3)); x < worldWidth; x++) {
             for (y = (worldHeight / 8 + r.nextInt(worldHeight / 3)); y < worldHeight; y++) {
                 if (worldFrame[x][y] == Tileset.FLOOR) {
@@ -41,11 +41,10 @@ public class Player {
         worldFrame[x][y] = Tileset.AVATAR;
         initialX = x;
         initialY = y;
-        return worldFrame;
     }
 
 
-    public TETile[][] move(char input) {
+    public void move(char input) {
         int factor = 0;
         if (input == 'A' || input == 'a' || input == 'D' || input == 'd') {
             if (input == 'A' || input == 'a') {
@@ -70,6 +69,5 @@ public class Player {
                 worldFrame[x][y] = Tileset.AVATAR;
             }
         }
-        return worldFrame;
     }
 }
