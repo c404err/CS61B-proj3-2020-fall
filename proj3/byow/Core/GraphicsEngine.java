@@ -20,8 +20,9 @@ public class GraphicsEngine {
     private int mouseOverX;
     private int mouseOverY;
     private TETile mouseOverTileType;
+    private final Engine gameEngine;
 
-    public GraphicsEngine(int width, int height) {
+    public GraphicsEngine(int width, int height, Engine gameEngine) {
         int yOffset = 2;
         int yOffsetTop = 5;
         renderer = new TERenderer();
@@ -35,6 +36,11 @@ public class GraphicsEngine {
         tooltipText = "";
         mouseOverX = 0;
         mouseOverY = 0;
+        this.gameEngine = gameEngine;
+    }
+
+    public void setWorldFrame(TETile[][] worldFrame) {
+        this.worldFrame = worldFrame;
     }
 
     private void clear() {
@@ -57,15 +63,14 @@ public class GraphicsEngine {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16), "Please type your desired seed (Numbers only!)");
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 18), "Type S when finished");
-        StdDraw.show();
-    }
-    public void seedScreenTextUpdate(String input) {
-        showSeedInputScreen();
-        seedInput += input;
+        seedInput = Integer.toString(gameEngine.getSeed());
         StdDraw.setFont(promptFont);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 21), seedInput + "#");
         StdDraw.show();
+    }
+    public void seedScreenTextUpdate() {
+        //StdDraw.show();
     }
 
     public void showWorldScreen() {
@@ -79,7 +84,6 @@ public class GraphicsEngine {
     }
     public void setTooltipText(String newTooltip) {
         tooltipText = newTooltip;
-        showWorldScreen();
     }
     /**
      * getXTile() and getYTile()
@@ -104,14 +108,32 @@ public class GraphicsEngine {
      * Hook into this method from the main game loop to trigger updates as necessary
      */
     public void gameLoopHook() {
-        mouseOverX = getXTile() - 2;
-        mouseOverY = getYTile() - 2;
-        if (checkMouseInBounds()) {
-            if (mouseOverTileType == null || !mouseOverTileType.equals(worldFrame[mouseOverX][mouseOverY])) {
-                mouseOverTileType = worldFrame[mouseOverX][mouseOverY];
-                setTooltipText(mouseOverTileType.description());
+        if (gameEngine.getCurrentMenu().equals("Main")) {
+            showMainMenu();
+        } else if (gameEngine.getCurrentMenu().equals("SeedInput")) {
+            showSeedInputScreen();
+            seedScreenTextUpdate();
+        } else if (gameEngine.getCurrentMenu().equals("Overworld")) {
+            if (worldFrame == null) {
+                worldFrame = gameEngine.worldFrame;
             }
+            mouseOverX = getXTile() - 2;
+            mouseOverY = getYTile() - 2;
+            if (checkMouseInBounds()) {
+                if (mouseOverTileType == null || !mouseOverTileType.equals(worldFrame[mouseOverX][mouseOverY])) {
+                    mouseOverTileType = worldFrame[mouseOverX][mouseOverY];
+                    tooltipText = mouseOverTileType.description();
+                }
+            }
+            showWorldScreen();
         }
+    }
+
+    public boolean hasNextKeyTyped() {
+        return StdDraw.hasNextKeyTyped();
+    }
+    public char nextKeyTyped() {
+        return StdDraw.nextKeyTyped();
     }
 
     /**
@@ -124,37 +146,6 @@ public class GraphicsEngine {
                 && mouseOverY < worldFrame[0].length && mouseOverX >= 0);
     }
 
-
-    /**
-     * SIMULATION METHODS
-     * These methods exist for testing purposes only!
-     */
-    private void simulateGameLoop() {
-        while (true) {
-            gameLoopHook();
-        }
-    }
-    private void simulateSeedEntry(String seedEntry) {
-        for (int i = 0; i < seedEntry.length(); i++) {
-            seedScreenTextUpdate(seedEntry.substring(i, i+1));
-            StdDraw.pause(200);
-        }
-    }
-
-
-    public static void main(String[] args) {
-        int dummySeed = 123495182;
-        GraphicsEngine myFrame = new GraphicsEngine(Engine.WIDTH, Engine.HEIGHT);
-        myFrame.showMainMenu();
-        StdDraw.pause(3500);
-        //myFrame.showSeedInputScreen();
-        myFrame.simulateSeedEntry(dummySeed + "S");
-        myFrame.worldFrame = new Engine().interactWithInputString("N" + dummySeed + "S");
-        StdDraw.pause(2500);
-        myFrame.showWorldScreen();
-        StdDraw.pause(4000);
-        myFrame.setTooltipText("Hello World! This is a tooltip!");
-        myFrame.showWorldScreen();
-        myFrame.simulateGameLoop();
+    public static void main(String[] args) throws Exception {
     }
 }
