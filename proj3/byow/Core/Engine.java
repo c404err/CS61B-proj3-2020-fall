@@ -39,10 +39,6 @@ public class Engine {
     private boolean loadFlag = false;
 
 
-
-
-    //public Player p;
-
     public Engine() {
         seed = 0;
         inputHistory = new StringBuilder();
@@ -130,6 +126,7 @@ public class Engine {
                 seedInput = true;
                 currentMenu = "SeedInput";
             } else if (input == 'l') {
+                loadFlag = true;
                 load(false);
             } else if (input == 'r') {
                 //replay();
@@ -182,9 +179,6 @@ public class Engine {
 //            if (!reader.hasNext()) {
 //                return true;
 //            }
-            String sed;
-            if (!reader.hasNextLine())
-                sed = reader.nextLine();
 
             prevSeed = reader.nextLong();
             if (reader.hasNext())
@@ -209,7 +203,6 @@ public class Engine {
                 interactWithInputString("N" + prevSeed + "S" + prevPath);
 //            }
             reader.close();
-
         } catch (IOException e) {
             System.out.println("load error");
         }
@@ -221,32 +214,36 @@ public class Engine {
         try {
             File outputFile = new File("saved.txt");
             PrintWriter writer = new PrintWriter(outputFile,"UTF-8");
-            if (!outputFile.createNewFile()) {
-//                if (loadFlag) {
-//                    Scanner reader = new Scanner(outputFile);
-//                    seed = reader.nextLong();
-//                    prevPath = reader.next();
-//                } else {
-//                    outputFile.delete();
-//                    outputFile.createNewFile();
-//                }
-                outputFile.delete();
-                outputFile.createNewFile();
-            }
+
+//            if (!outputFile.createNewFile()) {
+////                if (loadFlag) {
+////                    Scanner reader = new Scanner(outputFile);
+////                    seed = reader.nextLong();
+////                    prevPath = reader.next();
+////                } else {
+////                    outputFile.delete();
+////                    outputFile.createNewFile();
+////                }
+//                outputFile.delete();
+//                outputFile.createNewFile();
+//            }
+
             if (loadFlag) {
-//                writer.println("" + prevSeed);
+                writer.println(prevSeed);
+                writer.flush();
                 writer.println(prevPath + player.getPath());
+                writer.flush();
             } else {
                 writer.println(seed);
+                writer.flush();
                 writer.println(player.getPath());
+                writer.flush();
             }
             writer.close();
         } catch (IOException e) {
             System.out.println("save error");
         }
     }
-
-
 
 
 
