@@ -213,11 +213,6 @@ public class Engine {
             File outputFile = new File("saved.txt");
             PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
 
-            if (!outputFile.createNewFile()) {
-                outputFile.delete();
-                outputFile.createNewFile();
-            }
-
             if (loadFlag) {
                 writer.println(prevSeed);
                 writer.println(prevPath + player.getPath());
