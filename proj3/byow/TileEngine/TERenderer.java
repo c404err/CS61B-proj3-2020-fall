@@ -101,7 +101,7 @@ public class TERenderer {
                 world[x][y].draw(x + xOffset, y + yOffset);
             }
         }
-        StdDraw.show();
+        //StdDraw.show();
     }
 
 

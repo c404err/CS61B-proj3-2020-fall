@@ -122,7 +122,7 @@ public class GraphicsEngine {
             if (checkMouseInBounds()) {
                 if (mouseOverTileType == null || !mouseOverTileType.equals(worldFrame[mouseOverX][mouseOverY])) {
                     mouseOverTileType = worldFrame[mouseOverX][mouseOverY];
-                    setTooltipText(mouseOverTileType.description());
+                    tooltipText = mouseOverTileType.description();
                 }
             }
             showWorldScreen();
