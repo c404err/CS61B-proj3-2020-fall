@@ -173,6 +173,10 @@ public class Engine {
             File inputFile = new File("saved.txt");
             Scanner reader = new Scanner(inputFile);
 
+            if (!reader.hasNext()) {
+                System.exit(0);
+            }
+
             prevSeed = reader.nextLong();
             if (reader.hasNext()) {
                 prevPath = reader.next();
@@ -196,7 +200,7 @@ public class Engine {
             }
             reader.close();
         } catch (IOException | InterruptedException e) {
-            System.out.println("load error");
+            System.exit(0);
         }
     }
 
