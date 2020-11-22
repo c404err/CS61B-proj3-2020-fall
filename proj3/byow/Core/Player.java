@@ -12,6 +12,8 @@ public class Player {
             worldWidth, worldHeight;
     private TETile[][] worldFrame;
 
+    private String path = "";
+
     Player(int Width, int Height, TETile[][] world, Random random) {
         worldWidth = Width;
         worldHeight = Height;
@@ -19,12 +21,8 @@ public class Player {
         r = random;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public String getPath() {
+        return path;
     }
 
     public void addPlayer() {
@@ -34,7 +32,7 @@ public class Player {
                     break;
                 }
             }
-            if (worldFrame[x][y] == Tileset.FLOOR) {
+            if (y < worldHeight && worldFrame[x][y] == Tileset.FLOOR) {
                 break;
             }
         }
@@ -46,8 +44,9 @@ public class Player {
 
     public void move(char input) {
         int factor = 0;
-        if (input == 'A' || input == 'a' || input == 'D' || input == 'd') {
-            if (input == 'A' || input == 'a') {
+        path += input;
+        if (input == 'a' || input == 'd') {
+            if (input == 'a') {
                 factor= -1;
             } else {
                 factor = 1;
@@ -57,10 +56,10 @@ public class Player {
                 x += factor;
                 worldFrame[x][y] = Tileset.AVATAR;
             }
-        } else if (input == 'S' || input == 's' || input == 'W' || input == 'w') {
-            if (input == 'S' || input == 's') {
+        } else if (input == 's' || input == 'w') {
+            if (input == 's') {
                 factor = -1;
-            } else if (input == 'W' || input == 'w') {
+            } else if (input == 'w') {
                 factor = 1;
             }
             if (worldFrame[x][y + factor] == Tileset.FLOOR) {

@@ -63,7 +63,7 @@ public class GraphicsEngine {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16), "Please type your desired seed (Numbers only!)");
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 18), "Type S when finished");
-        seedInput = Integer.toString(gameEngine.getSeed());
+        seedInput = Long.toString(gameEngine.getSeed());
         StdDraw.setFont(promptFont);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 21), seedInput + "#");

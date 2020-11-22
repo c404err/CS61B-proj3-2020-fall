@@ -23,7 +23,7 @@ public class Engine {
     public TETile[][] worldFrame;
     Random randomNumberGen;
     private Player player;
-    private int seed;
+    private long seed;
     private boolean seedInput = false;
     private boolean seedFinalized = false;
     private boolean quitPrimed = false;
@@ -33,6 +33,10 @@ public class Engine {
     private boolean graphics;
     private GraphicsEngine gEngine;
     private String currentMenu;
+
+    private String prevPath = "";
+    private long prevSeed;
+    private boolean loadFlag = false;
 
 
 
@@ -104,7 +108,7 @@ public class Engine {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
-    public TETile[][] interactWithInputString(String input) throws Exception {
+    public TETile[][] interactWithInputString(String input) {
 
         if (input == null) {
             return null;
@@ -126,7 +130,7 @@ public class Engine {
                 seedInput = true;
                 currentMenu = "SeedInput";
             } else if (input == 'l') {
-                //load();
+                load(false);
             } else if (input == 'r') {
                 //replay();
             }
@@ -136,7 +140,7 @@ public class Engine {
             } else if (input == ':' && !quitPrimed) {
                 quitPrimed = true;
             } else if (input == 'q' && quitPrimed) {
-                //save();
+                save();
                 quit = true;
             }
         }
@@ -161,98 +165,95 @@ public class Engine {
         currentMenu = "Overworld";
     }
 
-    public int getSeed() {
+    public long getSeed() {
         return seed;
     }
 
-    private TETile[][] load()
-            throws Exception {
-        File inputFile = new File("fa20-proj3-g488\\proj3\\byow\\Core\\saved.txt");
-        Scanner reader = new Scanner(inputFile);
-        player = new Player(WIDTH, HEIGHT, worldFrame, new Random());
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (reader.hasNextInt()) {
-                    int num = reader.nextInt();
-                    if (num == 0) {
-                        worldFrame[i][j] = Tileset.AVATAR;
-                        player.setX(i);
-                        player.setY(j);
-                    } else if (num == 1) {
-                        worldFrame[i][j] = Tileset.WALL;
-                    } else if (num == 2) {
-                        worldFrame[i][j] = Tileset.FLOOR;
-                    } else if (num == 3) {
-                        worldFrame[i][j] = Tileset.NOTHING;
-                    } else if (num == 4) {
-                        worldFrame[i][j] = Tileset.GRASS;
-                    } else if (num == 5) {
-                        worldFrame[i][j] = Tileset.WATER;
-                    } else if (num == 6) {
-                        worldFrame[i][j] = Tileset.FLOWER;
-                    } else if (num == 7) {
-                        worldFrame[i][j] = Tileset.LOCKED_DOOR;
-                    } else if (num == 8) {
-                        worldFrame[i][j] = Tileset.UNLOCKED_DOOR;
-                    } else if (num == 9) {
-                        worldFrame[i][j] = Tileset.SAND;
-                    } else if (num == 10) {
-                        worldFrame[i][j] = Tileset.MOUNTAIN;
-                    } else if (num == 11) {
-                        worldFrame[i][j] = Tileset.TREE;
-                    }
-                }
-            }
-        }return worldFrame;
-    }
 
-    public void save()
-            throws Exception {
-        File outputFile = new File("fa20-proj3-g488\\proj3\\byow\\Core\\saved.txt");
-        if (!outputFile.createNewFile()) {
-            outputFile.delete();
-            outputFile.createNewFile();
-        }
-        PrintWriter writer = new PrintWriter(outputFile);
-        for (int i = 0; i < WIDTH; i++) {
-            for (int j = 0; j < HEIGHT; j++) {
-                if (worldFrame[i][j].equals(Tileset.AVATAR)) {
-                    writer.write("0 ");
-                } else if (worldFrame[i][j].equals(Tileset.WALL)) {
-                    writer.write("1 ");
-                } else if (worldFrame[i][j].equals(Tileset.FLOOR)) {
-                    writer.write("2 ");
-                } else if (worldFrame[i][j].equals(Tileset.NOTHING)) {
-                    writer.write("3 ");
-                } else if (worldFrame[i][j].equals(Tileset.GRASS)) {
-                    writer.write("4 ");
-                } else if (worldFrame[i][j].equals(Tileset.WATER)) {
-                    writer.write("5 ");
-                } else if (worldFrame[i][j].equals(Tileset.FLOWER)) {
-                    writer.write("6 ");
-                } else if (worldFrame[i][j].equals(Tileset.LOCKED_DOOR)) {
-                    writer.write("7 ");
-                } else if (worldFrame[i][j].equals(Tileset.UNLOCKED_DOOR)) {
-                    writer.write("8 ");
-                } else if (worldFrame[i][j].equals(Tileset.SAND)) {
-                    writer.write("9 ");
-                } else if (worldFrame[i][j].equals(Tileset.MOUNTAIN)) {
-                    writer.write("10 ");
-                } else if (worldFrame[i][j].equals(Tileset.TREE)) {
-                    writer.write("11 ");
-                }
-            }
-        }
-        writer.close();
-    }
 
     public String getCurrentMenu() {
         return currentMenu;
     }
 
-    public static void main(String[] args) throws Exception {
+    private void load(boolean replay) {
+        try {
+            File inputFile = new File("saved.txt");
+            Scanner reader = new Scanner(inputFile);
+//            if (!reader.hasNext()) {
+//                return true;
+//            }
+            String sed;
+            if (!reader.hasNextLine())
+                sed = reader.nextLine();
+
+            prevSeed = reader.nextLong();
+            if (reader.hasNext())
+                prevPath = reader.next();
+//
+//            if (replay) {
+//                String currentPath = player.getPath();
+//                interactWithInputString("N" + prevSeed + "S");
+//                renderWorld();
+//                int ind = 0;
+//                while (ind < prevPath.length()) {
+//                    player.move(prevPath.charAt(ind));
+//                    renderWorld();
+//                    Thread.sleep(100);
+//                    ind++;
+//                }
+//                Thread.sleep(2000);
+//                interactWithInputString("N" + seed + "S" + currentPath);
+//                renderWorld();
+//
+//            } else {
+                interactWithInputString("N" + prevSeed + "S" + prevPath);
+//            }
+            reader.close();
+
+        } catch (IOException e) {
+            System.out.println("load error");
+        }
+
+//        return false;
+    }
+
+    public void save() {
+        try {
+            File outputFile = new File("saved.txt");
+            PrintWriter writer = new PrintWriter(outputFile,"UTF-8");
+            if (!outputFile.createNewFile()) {
+//                if (loadFlag) {
+//                    Scanner reader = new Scanner(outputFile);
+//                    seed = reader.nextLong();
+//                    prevPath = reader.next();
+//                } else {
+//                    outputFile.delete();
+//                    outputFile.createNewFile();
+//                }
+                outputFile.delete();
+                outputFile.createNewFile();
+            }
+            if (loadFlag) {
+//                writer.println("" + prevSeed);
+                writer.println(prevPath + player.getPath());
+            } else {
+                writer.println(seed);
+                writer.println(player.getPath());
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("save error");
+        }
+    }
+
+
+
+
+
+    public static void main(String[] args){
         Engine engine = new Engine(true);
-        engine.interactWithKeyboard();
+        engine.interactWithInputString("N123213213212133Swsaad:Q");
+        engine.interactWithInputString("LSADS:q");
         System.out.println("done");
     }
 }
