@@ -28,11 +28,6 @@ public class Engine {
     private GraphicsEngine gEngine;
     private String currentMenu;
 
-    private String prevPath = "";
-    private long prevSeed;
-    private boolean loadFlag = false;
-
-
     public Engine() {
         seed = 0;
         inputHistory = new StringBuilder();
@@ -119,7 +114,6 @@ public class Engine {
                 seedInput = true;
                 currentMenu = "SeedInput";
             } else if (input == 'l') {
-                loadFlag = true;
                 load(false);
             } else if (input == 'r') {
                 load(true);
@@ -132,6 +126,7 @@ public class Engine {
             } else if (input == 'q' && quitPrimed) {
                 save();
                 quit = true;
+                System.exit(0);
             }
         }
     }
@@ -172,34 +167,24 @@ public class Engine {
         try {
             File inputFile = new File("saved.txt");
             Scanner reader = new Scanner(inputFile);
+            String input = "";
 
             if (!reader.hasNext()) {
                 System.exit(0);
-            }
-
-            prevSeed = reader.nextLong();
-            if (reader.hasNext()) {
-                prevPath = reader.next();
-            }
-
-            if (replay) {
-                interactWithInputString("N" + prevSeed + "S");
-                gEngine.gameLoopHook();
-                int ind = 0;
-                while (ind < prevPath.length()) {
-                    player.move(prevPath.charAt(ind));
-                    gEngine.gameLoopHook();
-                    Thread.sleep(100);
-                    ind++;
-                }
-                player.clearPath();
-                Thread.sleep(500);
             } else {
-                interactWithInputString("N" + prevSeed + "S" + prevPath);
-                player.clearPath();
+                input = reader.nextLine();
+            }
+
+            for (int i = 0; i < input.length(); i++) {
+                inputHandler(input.charAt(i));
+                gEngine.gameLoopHook();
+                if (replay) {
+                    gEngine.graphicsPause(150);
+                }
             }
             reader.close();
-        } catch (IOException | InterruptedException e) {
+            inputHistory = new StringBuilder(input);
+        } catch (IOException e) {
             System.exit(0);
         }
     }
@@ -209,13 +194,8 @@ public class Engine {
             File outputFile = new File("saved.txt");
             PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
 
-            if (loadFlag) {
-                writer.println(prevSeed);
-                writer.println(prevPath + player.getPath());
-            } else {
-                writer.println(seed);
-                writer.println(player.getPath());
-            }
+            // Chop last two characters (:q)
+            writer.println(inputHistory.substring(0, inputHistory.length() - 2));
             writer.close();
         } catch (IOException e) {
             System.out.println("save error");

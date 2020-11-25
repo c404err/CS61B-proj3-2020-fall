@@ -11,21 +11,11 @@ public class Player {
             worldWidth, worldHeight;
     private TETile[][] worldFrame;
 
-    private String path = "";
-
     Player(int width, int height, TETile[][] world, Random random) {
         worldWidth = width;
         worldHeight = height;
         worldFrame = world;
         r = random;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void clearPath() {
-        path = "";
     }
 
     public void addPlayer() {
@@ -47,7 +37,6 @@ public class Player {
 
     public void move(char input) {
         int factor = 0;
-        path += input;
         if (input == 'a' || input == 'd') {
             if (input == 'a') {
                 factor = -1;

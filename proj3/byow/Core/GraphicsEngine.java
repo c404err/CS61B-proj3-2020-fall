@@ -47,18 +47,64 @@ public class GraphicsEngine {
         StdDraw.clear(Color.BLACK);
     }
 
+    /**
+     * MAIN MENU METHODS
+     */
     public void showMainMenu() {
         clear();
         StdDraw.setFont(splashFont);
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16),
                 "CS61B: BYOW: The Game: The Sequel: Revengenace");
+
+
+        StdDraw.setPenRadius(.005);
+        mainMenuMouseOvers();
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.rectangle(40, 15, 10, 1.5);
+        StdDraw.rectangle(40, 12, 10, 1.5);
+        StdDraw.rectangle(40, 9, 10, 1.5);
+
+
         StdDraw.setFont(promptFont);
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT, 3),
-                "Press N to Build Your Own World!");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), 15,
+                "Build Your Own World! (N)");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), 12,
+                "Load Your Own World! (L)");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), 9,
+                "Replay Your Own World! (R)");
+
         StdDraw.show();
     }
 
+    public void mainMenuMouseOvers() {
+        double x = StdDraw.mouseX();
+        double y = StdDraw.mouseY();
+
+        if (x >= 30 && x <= 50) {
+            StdDraw.setPenColor(Color.GRAY);
+            if (y > 10.5 && y < 13.5) {
+                StdDraw.filledRectangle(40, 12, 10, 1.5);
+                if (StdDraw.isMousePressed()) {
+                    gameEngine.inputHandler('l');
+                }
+            } else if (y > 7.5 && y < 10.5) {
+                StdDraw.filledRectangle(40, 9, 10, 1.5);
+                if (StdDraw.isMousePressed()) {
+                    gameEngine.inputHandler('r');
+                }
+            } else if (y > 13.5 && y < 16.5) {
+                StdDraw.filledRectangle(40, 15, 10, 1.5);
+                if (StdDraw.isMousePressed()) {
+                    gameEngine.inputHandler('n');
+                }
+            }
+        }
+    }
+
+    /**
+     * SEED INPUT MENU METHODS
+     */
     public void showSeedInputScreen() {
         clear();
         StdDraw.setFont(promptFont);
@@ -76,6 +122,10 @@ public class GraphicsEngine {
     public void seedScreenTextUpdate() {
         //StdDraw.show();
     }
+
+    /**
+     * OVEWORLD METHODS
+     */
 
     public void showWorldScreen() {
         clear();
@@ -134,6 +184,18 @@ public class GraphicsEngine {
         }
     }
 
+    /**
+     * StdDraw Helper Methods
+     * These are necessary because all StdDraw calls must happen from the graphics engine
+     * in order to make sure only one StdDraw JFrame opens
+     * Unfortunately, the Engine class wants to call certain StdDraw methods so it needs to invoke
+     * them from here.
+     *
+     * All these do is call the corresponding method from within StdDraw
+     */
+    public void graphicsPause(int millis) {
+        StdDraw.pause(millis);
+    }
     public boolean hasNextKeyTyped() {
         return StdDraw.hasNextKeyTyped();
     }
