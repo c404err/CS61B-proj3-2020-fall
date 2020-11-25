@@ -51,6 +51,9 @@ public class Engine {
             graphicalGameLoop();
         }
         gameLoop();
+        if (graphics) {
+            System.exit(0);
+        }
     }
 
     private void gameLoop() {
@@ -176,10 +179,8 @@ public class Engine {
 
             for (int i = 0; i < input.length(); i++) {
                 inputHandler(input.charAt(i));
-                if (graphics) {
+                if (graphics && replay) {
                     gEngine.gameLoopHook();
-                }
-                if (replay) {
                     gEngine.graphicsPause(150);
                 }
             }
