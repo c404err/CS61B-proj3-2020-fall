@@ -126,7 +126,6 @@ public class Engine {
             } else if (input == 'q' && quitPrimed) {
                 save();
                 quit = true;
-                System.exit(0);
             }
         }
     }
