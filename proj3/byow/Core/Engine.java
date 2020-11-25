@@ -176,7 +176,9 @@ public class Engine {
 
             for (int i = 0; i < input.length(); i++) {
                 inputHandler(input.charAt(i));
-                gEngine.gameLoopHook();
+                if (graphics) {
+                    gEngine.gameLoopHook();
+                }
                 if (replay) {
                     gEngine.graphicsPause(150);
                 }
