@@ -21,6 +21,7 @@ public class GraphicsEngine {
     private int mouseOverY;
     private TETile mouseOverTileType;
     private final Engine gameEngine;
+    private boolean seedScreenButtonLockout;
 
     public GraphicsEngine(int width, int height, Engine gameEngine) {
         int yOffset = 2;
@@ -37,6 +38,7 @@ public class GraphicsEngine {
         mouseOverX = 0;
         mouseOverY = 0;
         this.gameEngine = gameEngine;
+        seedScreenButtonLockout = true;
     }
 
     public void setWorldFrame(TETile[][] worldFrame) {
@@ -111,16 +113,37 @@ public class GraphicsEngine {
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 16),
                 "Please type your desired seed (Numbers only!)");
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 18),
-                "Type S when finished");
         seedInput = Long.toString(gameEngine.getSeed());
-        StdDraw.setFont(promptFont);
+        StdDraw.setFont(new Font("Calibri", Font.BOLD, 32));
         StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(Math.floorDiv(WIDTH, 2), Math.floorDiv(HEIGHT * 10, 21), seedInput + "#");
+        StdDraw.text(Math.floorDiv(WIDTH, 2), 19, seedInput + "#");
+
+        // Draw button
+        seedScreenMouseovers();
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.rectangle(40, 14, 10, 1.5);
+        StdDraw.setFont(promptFont);
+        StdDraw.text(Math.floorDiv(WIDTH, 2), 14,
+                "Finish (S)");
+
+
         StdDraw.show();
     }
-    public void seedScreenTextUpdate() {
-        //StdDraw.show();
+    public void seedScreenMouseovers() {
+        double x = StdDraw.mouseX();
+        double y = StdDraw.mouseY();
+
+        if (x >= 30 && x <= 50) {
+            StdDraw.setPenColor(Color.GRAY);
+            if (y > 12.5 && y < 15.5) {
+                StdDraw.filledRectangle(40, 14, 10, 1.5);
+                if (StdDraw.isMousePressed() && !seedScreenButtonLockout) {
+                    gameEngine.inputHandler('s');
+                } else if (seedScreenButtonLockout && !StdDraw.isMousePressed()) {
+                    seedScreenButtonLockout = false;
+                }
+            }
+        }
     }
 
     /**
@@ -166,7 +189,6 @@ public class GraphicsEngine {
             showMainMenu();
         } else if (gameEngine.getCurrentMenu().equals("SeedInput")) {
             showSeedInputScreen();
-            seedScreenTextUpdate();
         } else if (gameEngine.getCurrentMenu().equals("Overworld")) {
             if (worldFrame == null) {
                 worldFrame = gameEngine.getWorldFrame();
